@@ -1,0 +1,24 @@
+.PHONY: pack all run clean
+OCAMLC=ocamlc str.cma #ocamlopt for speed
+PACKAGE=hw4.zip
+
+ifeq ($(OS),Windows_NT)
+	DEL=del /f
+else
+	DEL=rm -f
+endif
+
+all: main.exe
+
+run: main.exe
+	./main.exe
+
+main.exe:
+	cd src && $(OCAMLC) main.ml -o ../main.exe
+
+pack: $(GENERATED)
+	zip $(PACKAGE) -r Makefile src
+
+clean:
+	cd src && $(DEL) $(GENERATED:src/%=%) *.c* *.o*
+	$(DEL) main.exe $(PACKAGE)
